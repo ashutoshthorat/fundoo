@@ -15,14 +15,17 @@ import com.bridgelabz.util.Response;
 public interface IService
 {
 
-  public Response Register(UserDto userdto);
+  public Response register(UserDto userdto);
 
 public Response login(Login login);
 
 public Response forgot(ForgotPass forgotpass);
 
 public Response reset(String password, String token);
+
+public Response verify(String token);
 	
+public boolean verifyuser(String emailid);
 	
 	
 }

@@ -20,6 +20,4 @@ public class ResetPass
 	public String toString() {
 		return "ForgotPass [emailid=" + emailid + ", newpassword=" + newpassword + "]";
 	}
-	
-	
 }

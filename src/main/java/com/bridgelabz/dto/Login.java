@@ -1,11 +1,13 @@
 package com.bridgelabz.dto;
 
-public class Login 
-{
+import javax.validation.constraints.NotNull;
 
-	
-	String emailid;
-	String Password;
+public class Login {
+
+	@NotNull
+	private String emailid;
+	@NotNull
+	private String password;
 	public String getEmailid() {
 		return emailid;
 	}
@@ -13,14 +15,17 @@ public class Login
 		this.emailid = emailid;
 	}
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 	public void setPassword(String password) {
-		Password = password;
+		this.password = password;
 	}
 	@Override
 	public String toString() {
-		return "Login [emailid=" + emailid + ", Password=" + Password + "]";
+		return "Login [emailid=" + emailid + ", password=" + password + "]";
 	}
 	
+
+	
+
 }
