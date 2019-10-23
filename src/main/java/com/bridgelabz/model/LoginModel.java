@@ -1,16 +1,14 @@
-package com.bridgelabz.dto;
+package com.bridgelabz.model;
 
 import java.io.Serializable;
- 
+import java.time.LocalTime;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.Data;
-
-@Data
-public class Login implements Serializable
+public class LoginModel implements Serializable
 {
 
+	
 	
 	/**
 	 * 
@@ -20,27 +18,33 @@ public class Login implements Serializable
 	private String emailid;
 	@NotNull
 	private String password;
- 
+	
+	private LocalTime time;
+	 
 	public String getEmailid() {
 		return emailid;
 	}
 	public void setEmailid(String emailid) {
 		this.emailid = emailid;
 	}
-public String getPassword() {
+	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
-	this.password = password;
+		this.password = password;
 	}
-	
-	 
+	public LocalTime getTime() {
+		return time;
+	}
+	public void setTime(LocalTime time) {
+		this.time = time;
+	}
 	@Override
 	public String toString() {
-		return "Login [emailid=" + emailid + ", password=" + password + "]";
+		return "LoginModel [emailid=" + emailid + ", password=" + password + ", time=" + time + "]";
 	}
 	
-
 	
-
+	
+	
 }

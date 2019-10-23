@@ -1,13 +1,14 @@
 package com.bridgelabz.service;
 
 import java.time.LocalDateTime;
-
-
+import java.time.LocalTime;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.amqp.core.MessageListener;
+import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,13 @@ import com.bridgelabz.dto.ForgotPass;
 import com.bridgelabz.dto.Login;
 import com.bridgelabz.dto.UserDto;
 import com.bridgelabz.exception.RegistrationException;
+import com.bridgelabz.model.LoginModel;
 import com.bridgelabz.model.User;
 import com.bridgelabz.repository.UserRepository;
 import com.bridgelabz.util.Email;
 import com.bridgelabz.util.MessageProducer;
 import com.bridgelabz.util.Response;
+import com.bridgelabz.util.ResponseTime;
 import com.bridgelabz.util.StatusHelper;
 import com.bridgelabz.util.TokenUtil;
 
@@ -39,7 +42,10 @@ public class UserService implements IService {
 	@Autowired
 	private MailService mailservice;
 	@Autowired
-	MessageProducer messageproducer;
+	private MessageProducer messageproducer;
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
+	
 	
 	
 	
@@ -54,21 +60,16 @@ public class UserService implements IService {
 			User user = modelmapper.map(userdto, User.class);
 
 			repository.save(user);
-			email.setTo(userdto.getEmailid());
-			String toemailid = email.getTo();
-			email.setFrom("ashutoshrit64@gmail.com");
-			String fromemailid = email.getFrom();
-			email.setSubject("Verification...");
-			String subject = email.getSubject();
-			email.setBody(mailservice.getLink("http://localhost:8080/user/verify", user.getId()));
-			String body = email.getBody();
-			messageproducer.sendMessage(email);
-//			rabbitmqsender.sendtoqueue(email);
-//			System.out.println("send to queue");
-//			rabbitmqsender.sendemail(email);
 			
-		MailService.send(toemailid, subject, body);
-			return new Response(200, "registered succesfully..", null);
+			
+			email.setTo(userdto.getEmailid());
+			email.setFrom("ashutoshrit64@gmail.com");
+			email.setSubject("Verification...");
+			String token=tokenutil.createToken(user.getId());
+			email.setBody(mailservice.getLink("http://localhost:4200/verify/", user.getId()));
+			messageproducer.sendMessage(email);
+
+			return new Response(200, "registered succesfully..", token);
 		}
 	}
 
@@ -93,8 +94,33 @@ public class UserService implements IService {
 		if (isPresent.isPresent()) {
 			if (passwordencoder.matches(login.getPassword(), isPresent.get().getPassword())) {
 
+				LoginModel loginmodel=modelmapper.map(login,LoginModel.class);
 				Response response = new Response();
 				System.out.println("login succesfull");
+				
+				
+				if(redisTemplate.opsForValue().get("loginData").equals(null))
+						{
+					loginmodel.setTime(LocalTime.now());
+					redisTemplate.opsForValue().set("loginData", loginmodel);
+					Object data=redisTemplate.opsForValue().get("loginData");
+					System.out.println(data.toString());
+					  
+						}
+				else
+				{
+					Object data=redisTemplate.opsForValue().get("loginData");
+					byte[] byteData = SerializationUtils.serialize(data);
+					LoginModel loginModel = (LoginModel) SerializationUtils.deserialize(byteData);
+					System.out.println("User login last time is:"+loginModel.getTime());
+					
+					 loginmodel.setTime(LocalTime.now());
+					 
+					redisTemplate.opsForValue().set("loginData", loginmodel);
+					Object data1=redisTemplate.opsForValue().get("loginData");
+					System.out.println(data1.toString());
+					 
+				}
 				response.setStatusCode(200);
 				response.setStatusMessage("Login succesfully");
 				response.setToken(tokenutil.createToken(isPresent.get().getId()));
@@ -139,17 +165,12 @@ public class UserService implements IService {
 		Optional<User> isPresent = repository.findByEmailid(emailid);
 		if (isPresent.isPresent()) {
 			email.setTo(forgotpass.getEmailid());
-			String toemailid = email.getTo();
 			email.setFrom("ashutoshrit64@gmail.com");
-			String fromemailid = email.getFrom();
 			email.setSubject("forgot password link");
-			String subject = email.getSubject();
 			String token=tokenutil.createToken(isPresent.get().getId());
 			email.setBody(mailservice.getLink("http://localhost:4200/reset/", isPresent.get().getId()));
-			
-			System.out.println(token);
-			String body = email.getBody();
-			MailService.send(toemailid, subject, body);
+			messageproducer.sendMessage(email);
+ 
 			return new Response(400, "link is sent.....", token);
 		}
 		throw new RegistrationException(400, "user is not present.....");

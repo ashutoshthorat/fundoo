@@ -20,7 +20,7 @@ byte[] emailString = email.toString().getBytes();
   System.out.println(new Date());
   System.out.println();
   rabbitTemplate.convertAndSend(RabbitMqconfig.ROUTING_KEY, email);
-     System.out.println("Is listener returned ::: "+rabbitTemplate.isReturnListener());
+     System.out.println("Is Producer returned ::: "+rabbitTemplate.isReturnListener());
      System.out.println(email);
      System.out.println(new Date());
  }

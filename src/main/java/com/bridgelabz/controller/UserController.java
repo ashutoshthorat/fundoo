@@ -3,6 +3,7 @@ package com.bridgelabz.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -21,13 +22,15 @@ import com.bridgelabz.dto.UserDto;
 import com.bridgelabz.service.IService;
 import com.bridgelabz.util.Response;
 
+
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/user")
 @RestController
 public class UserController {
 	@Autowired(required = true)
 	private IService service;
-
+	@Autowired
+	private RedisTemplate<String, Object> redisTemplate;
 	@PostMapping("/register")
 	ResponseEntity<Response> register(@Valid @RequestBody UserDto userDto) {
 
@@ -38,7 +41,8 @@ public class UserController {
 	@PostMapping("/login")
 	ResponseEntity<Response> login(@Valid @RequestBody Login login) {
 		System.out.println(login.getPassword());
-//		login.setPassword("Amrut123");
+		 
+		
 		Response response = service.login(login);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -50,7 +54,7 @@ public class UserController {
 
 	}
 
-	@PostMapping("/verify{token}")
+	@PostMapping("/verify/{token}")
 	ResponseEntity<Response> verify(@Valid @PathVariable String token) {
 		Response response = service.verify(token);
 		return new ResponseEntity<>(response, HttpStatus.OK);
