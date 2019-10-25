@@ -3,6 +3,7 @@ package com.bridgelabz.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.mail.Multipart;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +42,8 @@ public class User implements Serializable {
 	private LocalDateTime updatedDate;
 	@Column(name = "verification")
 	private boolean verify;
-
+	@Column(name="profile")
+	private String profilepic;
 	public Long getId() {
 		return id;
 	}
@@ -126,11 +128,21 @@ public class User implements Serializable {
 		return serialVersionUID;
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", fname=" + fname + ", lname=" + lname + ", emailid=" + emailid + ", password="
-				+ password + ", phoneno=" + phoneno + ", dob=" + dob + ", registerDate=" + registerDate
-				+ ", updatedDate=" + updatedDate + ", verify=" + verify + "]";
+	public String getProfilepic() {
+		return profilepic;
 	}
 
+	public void setProfilepic(String profilepic) {
+		this.profilepic = profilepic;
+	}
+
+	@Override
+	public String toString() 
+	{
+		return "User [id=" + id + ", fname=" + fname + ", lname=" + lname + ", emailid=" + emailid + ", password="
+				+ password + ", phoneno=" + phoneno + ", dob=" + dob + ", registerDate=" + registerDate
+				+ ", updatedDate=" + updatedDate + ", verify=" + verify + ", profilepic=" + profilepic + "]";
+	}
+
+ 
 }

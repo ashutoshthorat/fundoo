@@ -1,26 +1,35 @@
 package com.bridgelabz.controller;
 
+import javax.mail.Multipart;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.dto.ForgotPass;
 import com.bridgelabz.dto.Login;
 import com.bridgelabz.dto.UserDto;
+ 
+import com.bridgelabz.model.User;
 import com.bridgelabz.service.IService;
 import com.bridgelabz.util.Response;
+import com.bridgelabz.util.UserResponse;
 
 
 @CrossOrigin(allowedHeaders = "*", origins = "*")
@@ -39,11 +48,11 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	ResponseEntity<Response> login(@Valid @RequestBody Login login) {
+	ResponseEntity<UserResponse> login(@Valid @RequestBody Login login) {
 		System.out.println(login.getPassword());
 		 
 		
-		Response response = service.login(login);
+		UserResponse response = service.login(login);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
@@ -66,11 +75,29 @@ public class UserController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping("/verifyuser")
+	@GetMapping("/verifyuser/{token}")
 	boolean verifyuser(@Valid @RequestParam String emailid) {
 		boolean response = service.verifyuser(emailid);
 		return response;
 
 	}
+	
+	@PostMapping(value = "/uploadImage/{token}",consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+	ResponseEntity<Response> setprofile(@RequestParam("File") MultipartFile path,@PathVariable String token)
+	{
+		System.out.println("------------------>>>>>>>>"+path);
+		Response response = service.setprofile(path, token);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getphoto")
+   Resource getprofile(@RequestParam String token){
+		Resource response = service.getprofile(token);
+		System.out.println(response);
+		return response;
+//		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	
 
 }

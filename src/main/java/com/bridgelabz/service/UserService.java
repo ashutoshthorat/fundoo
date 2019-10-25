@@ -1,16 +1,29 @@
 package com.bridgelabz.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files
+;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.dto.ForgotPass;
 import com.bridgelabz.dto.Login;
@@ -22,9 +35,10 @@ import com.bridgelabz.repository.UserRepository;
 import com.bridgelabz.util.Email;
 import com.bridgelabz.util.MessageProducer;
 import com.bridgelabz.util.Response;
-import com.bridgelabz.util.ResponseTime;
-import com.bridgelabz.util.StatusHelper;
 import com.bridgelabz.util.TokenUtil;
+import com.bridgelabz.util.UserResponse;
+import com.cloudinary.*;
+import com.cloudinary.utils.ObjectUtils;
 
 @Service
 public class UserService implements IService {
@@ -46,6 +60,7 @@ public class UserService implements IService {
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	
+	private final Path fileLocation = Paths.get("/home/user/");
 	
 	
 	
@@ -87,7 +102,7 @@ public class UserService implements IService {
 	}
 
 	@Override
-	public Response login(Login login) {
+	public UserResponse login(Login login) {
 
 		Optional<User> isPresent = repository.findByEmailid(login.getEmailid());
 
@@ -95,7 +110,7 @@ public class UserService implements IService {
 			if (passwordencoder.matches(login.getPassword(), isPresent.get().getPassword())) {
 
 				LoginModel loginmodel=modelmapper.map(login,LoginModel.class);
-				Response response = new Response();
+				UserResponse response = new UserResponse();
 				System.out.println("login succesfull");
 				
 				
@@ -124,19 +139,20 @@ public class UserService implements IService {
 				response.setStatusCode(200);
 				response.setStatusMessage("Login succesfully");
 				response.setToken(tokenutil.createToken(isPresent.get().getId()));
+				response.setFirstName(isPresent.get().getFname());
+				response.setlName(isPresent.get().getLname());
+				response.setEmail(isPresent.get().getEmailid());
 				return response;
 			}
 			else {
 				System.out.println("wrong emailid or password");
-				Response  response=StatusHelper.statusMessage(404, "Password does not match");
-				return response;
+				throw new RegistrationException(200, "password does not match....");
 			}
 			
 			
 		}
 		else {
-			Response  response=StatusHelper.statusMessage(404, "User does not exists");
-			return response;
+			throw new RegistrationException(200, "user not exist....");
 		}
 	}
 
@@ -188,5 +204,67 @@ public class UserService implements IService {
 			return value;
 		}
 	}
+
+	
+	@Override
+	public Response setprofile(MultipartFile path, String token)
+//	{ 
+	{
+		
+		
+		long userId = tokenutil.decodeToken(token);
+
+		Optional<User> user = repository.findById(userId);
+
+		if (!user.isPresent()) {
+			throw new RegistrationException(-5, "user is not present");
+		}
+
+		UUID uuid = UUID.randomUUID();
+
+		String uniqueId = uuid.toString();
+		try {
+			Files.copy(path.getInputStream(), fileLocation.resolve(uniqueId), StandardCopyOption.REPLACE_EXISTING);
+			user.get().setProfilepic(uniqueId);
+			repository.save(user.get());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return  new Response(400, "Profile pic is set.....", null);
+		
+		
+			}
+
+	@Override
+	public Resource getprofile(String token) {
+		
+		
+		
+		
+		long userId = tokenutil.decodeToken(token);
+
+		Optional<User> user = repository.findById(userId);
+		if (!user.isPresent()) {
+			throw new RegistrationException(-5, "user already exist");
+		}
+
+		try {
+			Path imageFile = fileLocation.resolve(user.get().getProfilepic());
+
+			Resource resource = new UrlResource(imageFile.toUri());
+
+			if (resource.exists() || (resource.isReadable())) {
+				System.out.println(resource);
+				return resource;
+			} else {
+				throw new Exception("Couldn't read file: " + imageFile);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 }
