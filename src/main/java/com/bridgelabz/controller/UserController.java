@@ -82,8 +82,8 @@ public class UserController {
 
 	}
 	
-	@PostMapping(value = "/uploadImage/{token}",consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
-	ResponseEntity<Response> setprofile(@RequestParam("File") MultipartFile path,@PathVariable String token)
+	@PostMapping(value = "/uploadImage/{token}")
+	ResponseEntity<Response> setprofile(@RequestParam MultipartFile path,@PathVariable String token)
 	{
 		System.out.println("------------------>>>>>>>>"+path);
 		Response response = service.setprofile(path, token);
