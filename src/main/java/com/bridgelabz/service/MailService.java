@@ -15,6 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.bridgelabz.util.TokenUtil;
 
+/**
+ *  
+ *  Purpose:Mail service created for the sending mail to the user
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
 @Component
 public class MailService
 {
@@ -22,6 +30,7 @@ public class MailService
 	@Autowired
 	private TokenUtil tokenutil;
  
+	//all the content of the mail is taken as parameter to this given method of the java mail service
 	public static void send(String toEmail, String subject, String body)
 	{
 		final String fromEmail = "ashutoshrit64@gmail.com"; 
@@ -65,6 +74,7 @@ public class MailService
 		e.printStackTrace(); 
 		}
 	}
+	//body for the given user link is created here
     public String getLink(String link,long id)
     {
         return link+tokenutil.createToken(id);

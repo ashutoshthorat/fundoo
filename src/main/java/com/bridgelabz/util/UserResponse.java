@@ -1,5 +1,13 @@
 package com.bridgelabz.util;
 
+/**
+ *  
+ *  Purpose:RESPONSE AFTER LOGIN
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
 public class UserResponse {
 
 	private int statusCode;

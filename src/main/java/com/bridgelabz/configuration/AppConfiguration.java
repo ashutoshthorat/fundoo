@@ -20,9 +20,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bridgelabz.service.IService;
 import com.bridgelabz.service.UserService;
+
+
+
+
+
+/**
+ * @author- Ashutosh
+ *	purpose-configuration 
+ */
 @Configuration
 public class AppConfiguration 
 {
+	//modelmapperconfiguration
 	@Bean
 	public ModelMapper modelMapper() {
 	ModelMapper modelMapper = new ModelMapper();
@@ -35,7 +45,7 @@ public class AppConfiguration
 	public IService service() {
 	    return new UserService();
 	}
-	
+	//jms configuration
 	@Bean
 	  public JavaMailSender javamailsender() {
 		  return new JavaMailSender() {

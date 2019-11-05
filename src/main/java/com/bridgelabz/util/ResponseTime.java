@@ -2,6 +2,14 @@ package com.bridgelabz.util;
 
 import org.springframework.stereotype.Component;
 
+/**
+ *  
+ *  Purpose:RESPONSE WITH TIME
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
 @Component
 public class ResponseTime {
 	private Integer statusCode;

@@ -5,6 +5,17 @@ import java.time.LocalTime;
 
 import javax.validation.constraints.NotNull;
 
+import lombok.Data;
+
+/**
+ *  
+ *  Purpose:Model for the login
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
+@Data
 public class LoginModel implements Serializable
 {
 
@@ -20,30 +31,8 @@ public class LoginModel implements Serializable
 	private String password;
 	
 	private LocalTime time;
-	 
-	public String getEmailid() {
-		return emailid;
-	}
-	public void setEmailid(String emailid) {
-		this.emailid = emailid;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public LocalTime getTime() {
-		return time;
-	}
-	public void setTime(LocalTime time) {
-		this.time = time;
-	}
-	@Override
-	public String toString() {
-		return "LoginModel [emailid=" + emailid + ", password=" + password + ", time=" + time + "]";
-	}
-	
+
+
 	
 	
 	

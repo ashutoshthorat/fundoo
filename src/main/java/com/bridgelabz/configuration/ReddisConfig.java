@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 
 import redis.clients.jedis.JedisPoolConfig;
 
+/**
+ * @author Ashutosh
+ * purpose-reddis configuration
+ */
 @Configuration
 @Component
 public class ReddisConfig {

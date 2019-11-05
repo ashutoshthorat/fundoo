@@ -3,11 +3,22 @@ package com.bridgelabz.util;
 import java.io.Serializable;
 
 import org.springframework.stereotype.Component;
-
+/**
+ *  
+ *  Purpose:EMAIL ENTITIY CLASS
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
 @Component
 public class Email implements Serializable
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String to;
 	String from;
 	String subject;

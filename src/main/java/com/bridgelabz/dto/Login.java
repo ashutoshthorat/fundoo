@@ -7,6 +7,15 @@ import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
+
+/**
+ *  
+ *  Purpose:dto for the Login
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
 @Data
 public class Login implements Serializable
 {

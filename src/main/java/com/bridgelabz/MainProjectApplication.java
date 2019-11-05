@@ -1,28 +1,35 @@
 package com.bridgelabz;
 
-import javax.sound.midi.Receiver;
+/*
+ * JAVA STYLE GUIDE - SOURCE FILE HEADER STYLE
+ * NOTE - A SINGLE BLANK LINE SEPARATES THE TWO BLOCKS i.e. BETWEEN HEADER, PACKAGE, 
+ *        IMPORT STATEMENTS, CLASS DECLARATION, etc
+ */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+/******************************************************************************
+ *   
+ *  
+ *  Purpose: USER REGISTRATION LOGIN RESETPASSWORD VERIFYUSER
+ *
+ *  @author  ASHUTOSH
+ *  @version 1.0
+ *  @since   05-11-2019
+ *
+ ******************************************************************************/
+
+/*
+ * JAVA STYLE GUIDE - PACKAGE NAMING STYLE
+ */
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import com.rabbitmq.client.ConnectionFactory;
-
+ 
 @SpringBootApplication
 @ComponentScan("com.bridgelabz")
 @EnableJpaRepositories("com.bridgelabz.repository")
- 
-
+@EnableEurekaClient
 public class MainProjectApplication {
 
 

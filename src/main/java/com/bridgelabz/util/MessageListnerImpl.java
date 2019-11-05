@@ -7,7 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bridgelabz.service.MailService;
-
+/**
+ *  
+ *  Purpose:MESSAGE LISTNER IMPLEMENTATION FOR RABBITMQ
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
 @Component
 public class MessageListnerImpl implements MessageListener{
 
@@ -26,6 +33,7 @@ public void onMessage(Email email) throws NoSuchFieldException, SecurityExceptio
 	System.out.println("from : "+email.from);
 	System.out.println("body:"+email.body);
 	System.out.println("subject:"+email.subject);
+	//SENDING MESSAGE FROM JMS GETTING FROM RABBITMQ ONE BY ONE
 	mailsender.send(email.to, email.subject, email.body);
 	System.out.println("****************************************");
 	

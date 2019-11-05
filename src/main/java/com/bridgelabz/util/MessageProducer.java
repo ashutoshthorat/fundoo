@@ -10,7 +10,14 @@ import com.bridgelabz.configuration.RabbitMqconfig;
 
 @Component
 public class MessageProducer {
- 
+	/**
+	 *  
+	 *  Purpose:SENDING MESSAGE TO RABBITMQ
+	 *
+	 * @author Ashutosh
+	 *  @version 1.0
+	 *  @since   05-11-2019
+	 */
  @Autowired
     private RabbitTemplate rabbitTemplate;
  

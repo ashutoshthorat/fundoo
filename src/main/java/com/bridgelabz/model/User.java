@@ -1,9 +1,9 @@
 package com.bridgelabz.model;
 
 import java.io.Serializable;
+
 import java.time.LocalDateTime;
 
-import javax.mail.Multipart;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,13 +12,22 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/**
+ *  
+ *  Purpose:Model for the User data Registration
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
 
 	/**
-		 * 
-		 */
+	 *   
+	 */
+	
 	private static final long serialVersionUID = -5086924757456958253L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -44,6 +53,8 @@ public class User implements Serializable {
 	private boolean verify;
 	@Column(name="profile")
 	private String profilepic;
+	
+
 	public Long getId() {
 		return id;
 	}
@@ -144,5 +155,17 @@ public class User implements Serializable {
 				+ ", updatedDate=" + updatedDate + ", verify=" + verify + ", profilepic=" + profilepic + "]";
 	}
 
+	public User(@NotNull String fname, String lname, String emailid, String password, String phoneno, String dob) {
+		super();
+		this.fname = fname;
+		this.lname = lname;
+		this.emailid = emailid;
+		this.password = password;
+		this.phoneno = phoneno;
+		this.dob = dob;
+	}
+public User() {
+	
+}
  
 }

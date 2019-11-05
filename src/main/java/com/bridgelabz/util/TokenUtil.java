@@ -10,6 +10,14 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Verification;
 
+/**
+ *  
+ *  Purpose:CREATING TOKEN AND DECODING IT
+ *
+ * @author Ashutosh
+ *  @version 1.0
+ *  @since   05-11-2019
+ */
 @Component
 	public class TokenUtil {
 	 public  final String TOKEN_SECRET = "Ashutosh";

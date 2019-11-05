@@ -15,6 +15,10 @@ import com.bridgelabz.util.MessageListener;
 
  
 
+/**
+ * @author Ashutosh
+ * purpose-rabbitmq config
+ */
 @Configuration
 public class RabbitMqconfig {
  
