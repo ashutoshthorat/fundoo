@@ -35,7 +35,7 @@ public class MailService
 	{
 		final String fromEmail = "ashutoshrit64@gmail.com"; 
 		// requires valid gmail id 
-		final String password = "nautanki12071998"
+		final String password = "nautanki"
 		; // correct password for gmail id
 	Properties props = new Properties();
 	props.put("mail.smtp.host", "smtp.gmail.com");
